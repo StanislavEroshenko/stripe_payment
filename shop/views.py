@@ -33,8 +33,8 @@ def buy_item(request, id):
             'quantity': 1,
         }],
         mode='payment',
-        success_url='http://127.0.0.1:8000',
-        cancel_url='http://127.0.0.1:8000/item/{}/'.format(item.id),
+        success_url=request.build_absolute_uri('/'),
+        cancel_url=request.build_absolute_uri(f'/item/{item.id}/'), 
     )
     return JsonResponse({'id': session.id})
 
@@ -89,8 +89,8 @@ def buy_order(request, id):
         ],
         discounts=discounts,
         mode='payment',
-        success_url='http://127.0.0.1:8000',
-        cancel_url='http://127.0.0.1:8000', # Вообще не данном этапе этот момент меня смущает, но раз работает то оставляем.
+        success_url=request.build_absolute_uri('/'),
+        cancel_url=request.build_absolute_uri('/'), # Вообще не данном этапе этот момент меня смущает, но раз работает то оставляем.
     )
 
     return JsonResponse({'id': session.id})

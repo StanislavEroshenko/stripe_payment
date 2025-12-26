@@ -29,6 +29,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+CSRF_TRUSTED_ORIGINS = ['https://stripe-payment-4uvm.onrender.com']
+
 
 # Application definition
 

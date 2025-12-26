@@ -1,0 +1,32 @@
+<html>
+<head>
+<title>Menu</title>
+</head>
+<body>
+<h1>Site Menu</h1>
+
+<h2>Items</h2>
+<ul>
+{% for item in items %}
+  <li>
+    <a href="/item/{{ item.id }}/">{{ item.name }} ({{ item.currency|upper }})</a>
+  </li>
+{% endfor %}
+</ul>
+
+<h2>Orders</h2>
+<ul>
+{% for order in orders %}
+  <li>
+    <a href="/order/{{ order.id }}/">Order #{{ order.id }}</a>
+  </li>
+{% endfor %}
+</ul>
+
+<h2>Admin</h2>
+<ul>
+  <li><a href="/admin/">Go to Admin</a></li>
+</ul>
+
+</body>
+</html>

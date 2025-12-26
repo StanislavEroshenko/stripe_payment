@@ -1,0 +1,56 @@
+<html>
+<head>
+    <title>{{ item.name }}</title>
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+
+
+<body>
+<h1>{{ item.name }}</h1>
+<p>{{ item.description }}</p>
+<p>{{ item.price }}</p>
+<button id="buy-button">Buy (Stripe Session)</button>
+<br><br>
+<button id="intent-button">Pay with Card (Stripe Payment Intent)</button>
+<br><br>
+<a href="/"> menu </a>
+<div id="card-element" style="margin-top: 10px;"></div>
+<div id="card-errors"></div>
+
+<script>
+const stripe = Stripe("{{ public_key }}")
+document.getElementById("buy-button").addEventListener("click", function () {
+    fetch("/buy/{{ item.id }}/")
+        .then(r => r.json())
+        .then(data => {
+            stripe.redirectToCheckout({ sessionId: data.id })
+        })
+})
+
+/* Stripe Payment Intent как альтернативная оплата, для доп задания */
+
+const elements = stripe.elements()
+const card = elements.create("card")
+card.mount("#card-element")
+document.getElementById("intent-button").addEventListener("click", async function () {
+    const response = await fetch("/buy-intent/{{ item.id }}/")
+    const data = await response.json()
+
+    const result = await stripe.confirmCardPayment(data.client_secret, {
+        payment_method: {
+            card: card
+        }
+    })
+
+    if (result.error) {
+        document.getElementById("card-errors").innerText = result.error.message
+    } else {
+        if (result.paymentIntent.status === "succeeded") {
+            alert("Payment succeeded!")
+        }
+    }
+})
+</script>
+
+</body>Ц
+</html>
